@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="ProjectSensorBus.vcxproj" Id="58075e24-7903-4525-a764-2b8c40612cc3" />
+</Solution>
