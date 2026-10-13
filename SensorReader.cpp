@@ -15,7 +15,6 @@ void SensorReader::readSensor(ISensor& sensor) {
 
 void SensorReader::printValues() const
 {
-    
     std::cout << sensorName << " : " << sensorValue << " at " << timestampToString() << std::endl;
 }
 

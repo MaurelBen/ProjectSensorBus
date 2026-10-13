@@ -14,6 +14,7 @@ public:
 
     // dump the values on string format
     virtual std::string valueToString() const = 0;
+    std::string getName();
 private:
     std::string name;
     std::chrono::milliseconds updateDeltaTime = std::chrono::milliseconds(200); // delta time in ms

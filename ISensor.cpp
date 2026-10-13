@@ -8,3 +8,7 @@ bool ISensor::tryUpdate() {
     }
     return false;
 }
+
+std::string ISensor::getName() {
+    return name;
+}

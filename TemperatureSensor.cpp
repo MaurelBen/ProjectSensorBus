@@ -6,7 +6,6 @@ TemperatureSensor::TemperatureSensor(const std::string& name) :
 }
 
 TemperatureSensor::~TemperatureSensor() {
-	
 }
 
 void TemperatureSensor::updateValues() {
