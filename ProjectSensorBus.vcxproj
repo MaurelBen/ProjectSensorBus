@@ -143,11 +143,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SensorReader.cpp" />
     <ClCompile Include="TemperatureSensor.cpp" />
+    <ClCompile Include="WindSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ISensor.h" />
     <ClInclude Include="SensorReader.h" />
     <ClInclude Include="TemperatureSensor.h" />
+    <ClInclude Include="WindSensor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

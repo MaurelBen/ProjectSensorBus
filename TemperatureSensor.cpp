@@ -1,7 +1,7 @@
 #include "TemperatureSensor.h"
 
 TemperatureSensor::TemperatureSensor(const std::string& name) :
-	name_(name) {
+	ISensor(name) {
 	updateValues();
 }
 
@@ -10,8 +10,8 @@ TemperatureSensor::~TemperatureSensor() {
 }
 
 void TemperatureSensor::updateValues() {
-	// Default value
-	value = 0.0; 
+	// Random value between 0 et 50
+	value = rand()%51; 
 }
 
 std::string TemperatureSensor::valueToString() const {

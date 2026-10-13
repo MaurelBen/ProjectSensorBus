@@ -13,7 +13,6 @@ public:
     std::string valueToString() const;
 
 private:
-    std::string name_;
     float value;
 };
 
