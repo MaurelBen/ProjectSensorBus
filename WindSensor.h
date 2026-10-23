@@ -18,6 +18,7 @@ class WindSensor : public ISensor
 {   
 public:
     WindSensor(const std::string &name);
+    WindSensor(const std::string& name, std::chrono::milliseconds dt);
     ~WindSensor();
     // dump the values on string format
     std::string valueToString() const;

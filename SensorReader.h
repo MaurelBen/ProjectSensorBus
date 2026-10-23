@@ -7,7 +7,7 @@
 class SensorReader
 {
 public:
-	SensorReader(const std::string& name);
+	SensorReader();
 	// get the value of the sensor and update the timestamp
 	void readSensor(ISensor& sensor);
 	// print with a correct format value and date of the sensor last read

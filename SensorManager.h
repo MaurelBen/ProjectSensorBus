@@ -1,16 +1,22 @@
 #pragma once
 #include <iostream>
 #include "ISensor.h"
+#include "SensorReader.h"
+#include <thread>
 class SensorManager
 {
 public:
 	SensorManager() = default;
 	~SensorManager() = default;
 
-	void add(ISensor* sensor);
-	void remove(ISensor* sensor);
+	void add(std::unique_ptr<ISensor> sensor);
+	void remove(std::unique_ptr<ISensor> sensor);
 	void dumpState() const;
+
+	void LoopUpdateSensors(std::chrono::milliseconds time);
 private:
-	std::vector<ISensor*> sensors;
+	std::vector<std::unique_ptr<ISensor>> sensors;
+	void updateSensors();
+	void displayValue() const;
 };
 

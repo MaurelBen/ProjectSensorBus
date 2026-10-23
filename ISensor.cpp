@@ -2,7 +2,7 @@
 
 
 bool ISensor::tryUpdate() {
-	const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
     if (now - lastUpdate >= updateDeltaTime) {
         return true;
     }
@@ -11,4 +11,14 @@ bool ISensor::tryUpdate() {
 
 std::string ISensor::getName() {
     return name;
+}
+std::chrono::system_clock::time_point ISensor::getTime() {
+    return lastUpdate;
+}
+
+void ISensor::setUpdateDeltaTime(std::chrono::milliseconds dt) {
+    updateDeltaTime = dt;
+}
+void ISensor::updateLastUpdate() {
+    lastUpdate = std::chrono::system_clock::now();
 }

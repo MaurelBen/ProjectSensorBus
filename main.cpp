@@ -4,22 +4,19 @@
 #include "WindSensor.h"
 #include "SensorManager.h"
 
-int main() {
-	TemperatureSensor tempSensor("TempSensor");
-	WindSensor windSensor("WindSensor");
-	WindSensor windSensor2("WindSensor2");
+std::unique_ptr<SensorManager> initSensors() {
+	std::unique_ptr<SensorManager> manager = std::make_unique<SensorManager>();
+	manager->add(std::make_unique<TemperatureSensor>("TempSensor", std::chrono::milliseconds(1000)));
+	manager->add(std::make_unique<TemperatureSensor>("TempSensor2", std::chrono::milliseconds(2500)));
+	manager->add(std::make_unique<WindSensor>("WindSensor", std::chrono::milliseconds(1000)));
+	return manager;
+}
 
-	SensorManager manager;
-	manager.add(&tempSensor);
-	manager.add(&windSensor);
-	manager.dumpState();
-
-	manager.remove(&tempSensor);
-	manager.dumpState();
-
-	manager.add(nullptr);
-	manager.add(&windSensor2);
-	manager.dumpState();
+int main() 
+{
+	std::unique_ptr<SensorManager> manager = initSensors();
+	manager->dumpState();
+	manager->LoopUpdateSensors(std::chrono::milliseconds(5000));
 	return 0;
 }
 
