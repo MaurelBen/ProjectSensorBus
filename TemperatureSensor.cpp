@@ -16,7 +16,7 @@ TemperatureSensor::~TemperatureSensor() {
 
 void TemperatureSensor::updateValues() {
 	// Random value between 0 et 50
-	value = rand()%51; 
+	value = (float)(rand()%51); 
 	updateLastUpdate();
 }
 

@@ -12,13 +12,14 @@ public:
     virtual void updateValues() = 0;
 
     void setUpdateDeltaTime(std::chrono::milliseconds dt);
-    bool tryUpdate();
+    const bool tryUpdate() const;
 
     // dump the values on string format
     virtual std::string valueToString() const = 0;
-    std::string getName();
-    std::chrono::system_clock::time_point getTime();
+    const std::string getName();
+    std::chrono::system_clock::time_point getTime()const;
     void updateLastUpdate();
+     std::chrono::milliseconds getUpdateDt() const;
 private:
     std::string name;
     std::chrono::milliseconds updateDeltaTime = std::chrono::milliseconds(200); // delta time in ms

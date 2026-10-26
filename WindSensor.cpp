@@ -18,12 +18,12 @@ std::string WindSensor::valueToString() const
 void WindSensor::updateValues()
 {	
 	// 2d value normalized between 1 and -1
-	float x = (rand() % 101 - 50.0)/100.0;
-	float y = (rand() % 101 - 50.0)/100.0;
+	float x =(float) (rand() % 101 - 50.0)/100.0f;
+	float y =(float) (rand() % 101 - 50.0)/100.0f;
 	wind.dir.x = x;
 	wind.dir.y = y;
 
-	wind.speed = rand() % 100;
+	wind.speed = (float) (rand() % 100);
 	updateLastUpdate();
 }
 

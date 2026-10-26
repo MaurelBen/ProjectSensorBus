@@ -12,11 +12,13 @@ public:
 	void add(std::unique_ptr<ISensor> sensor);
 	void remove(std::unique_ptr<ISensor> sensor);
 	void dumpState() const;
-
 	void LoopUpdateSensors(std::chrono::milliseconds time);
+	void LoopUpdateSensorsMt(std::chrono::milliseconds time);
+
 private:
 	std::vector<std::unique_ptr<ISensor>> sensors;
 	void updateSensors();
 	void displayValue() const;
+	void displayValueMt() const;
 };
 

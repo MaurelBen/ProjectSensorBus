@@ -2,6 +2,14 @@
 #include <iostream>
 #include <format>
 
+static const std::chrono::time_zone* const tz = std::chrono::current_zone();
+
+static std::string formatTime(std::chrono::system_clock::time_point tp) {
+    using namespace std::chrono;
+    // heure locale, tronquée à la milliseconde
+    zoned_time local{ tz, floor<milliseconds>(tp) };
+    return std::format("{:%H:%M:%S}", local);
+}
 
 SensorReader::SensorReader()
     : sensorName("none"), sensorValue("0"), timestamp(std::chrono::system_clock::now())
@@ -16,9 +24,13 @@ void SensorReader::readSensor(ISensor& sensor) {
 
 void SensorReader::printValues() const
 {
-    std::cout  << sensorName << " : " << sensorValue << " at " << timestampToString() 
-        << " read at " << std::format("{:%H:%M:%S}", std::chrono::system_clock::now()) 
-        << std::endl;
+    using namespace std::chrono;
+
+    // heure de lecture : locale, tronquée à la milliseconde
+    zoned_time readAt{ tz, floor<milliseconds>(system_clock::now()) };
+    std::cout << std::format("{:<12} : {:>6} | lastUpdate {} | lu {:%H:%M:%S}\n",
+        sensorName, sensorValue, timestampToString(), readAt);
+
 }
 
 std::chrono::system_clock::time_point SensorReader::getTimestamp() const {
@@ -26,5 +38,9 @@ std::chrono::system_clock::time_point SensorReader::getTimestamp() const {
 }
 
 std::string SensorReader::timestampToString() const {
-    return std::format("{:%H:%M:%S}", timestamp);
+    using namespace std::chrono;
+      // initialisée une seule fois
+    zoned_time local{ tz, floor<milliseconds>(timestamp) };
+    return std::format("{:%H:%M:%S}", local);
+   // return std::format("{:%H:%M:%S}", timestamp);
 }
