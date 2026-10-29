@@ -26,8 +26,9 @@ static std::unique_ptr<SensorManager> initSensorsMulti(int nb) {
 int main() 
 {
 	//std::unique_ptr<SensorManager> manager = initSensorsBasic();
-	std::unique_ptr<SensorManager> manager = initSensorsMulti(100);
+	std::unique_ptr<SensorManager> manager = initSensorsMulti(1000);
 	//manager->dumpState();
-	manager->LoopUpdateSensorsMt(std::chrono::milliseconds(10000));
+
+	manager->LoopUpdateSensorsMt(std::chrono::milliseconds(1000));
 	return 0;
 }

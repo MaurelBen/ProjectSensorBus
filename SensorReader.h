@@ -12,10 +12,11 @@ public:
 	void readSensor(ISensor& sensor);
 	// print with a correct format value and date of the sensor last read
 	void printValues() const;
-
+	std::string getValues() const;
 	std::chrono::system_clock::time_point getTimestamp() const;
 
 private:
+
 	std::string sensorName;
 	std::string sensorValue;
 	std::chrono::system_clock::time_point timestamp;
