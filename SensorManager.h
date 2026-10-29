@@ -20,7 +20,6 @@ private:
 	mutable  std::vector<std::string> displayBuffer;
 	void updateSensors();
 	void displayValue() const;
-	void displayValueMt() const;
 	void displayValueMtBuffered() const;
 };
 

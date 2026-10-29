@@ -1,6 +1,9 @@
 #include "SensorManager.h"
 #include <numeric>
 #define SLEEPINGTIME std::chrono::milliseconds(1000)
+constexpr size_t NBTHREADS = 8;
+
+static const std::chrono::time_zone* const timezone = std::chrono::current_zone();
 
 void SensorManager::add(std::unique_ptr<ISensor> sensor) {
 	if (sensor == nullptr) return;
@@ -62,7 +65,7 @@ void SensorManager::LoopUpdateSensorsMt(std::chrono::milliseconds time) {
 
 	auto fin = std::chrono::steady_clock::now();
 	auto us = std::chrono::duration_cast<std::chrono::microseconds>(fin - debut);
-	std::cerr << "Duree : " << us.count() << " micro \n";
+	std::cout << "Duree : " << us.count() << " micro \n";
 
 	
 	// Affichage dans le thread courant
@@ -70,12 +73,6 @@ void SensorManager::LoopUpdateSensorsMt(std::chrono::milliseconds time) {
 	int i = 1;
 	while (std::chrono::system_clock::now() < end) {
 		std::cout << " ---- New loop ---- " << i << std::endl;
-		/*
-		debut = std::chrono::steady_clock::now();
-		displayValueMt();
-		fin = std::chrono::steady_clock::now();
-		us = std::chrono::duration_cast<std::chrono::microseconds>(fin - debut);
-		std::cerr << "Duree : " << us.count() << " micro s\n";*/
 
 		displayValueMtBuffered();
 
@@ -96,52 +93,47 @@ void SensorManager::updateSensors()
 	}
 }
 
-static void readMonoSensor(ISensor& sensor) {
-	SensorReader reader = SensorReader();
-	reader.readSensor(sensor);
-	reader.printValues();
-}
-
-static void readMonoSensorBuffered(ISensor& sensor,std::string* value) {
-	SensorReader reader = SensorReader();
-	reader.readSensor(sensor);
-	*value = reader.getValues();
-}
-
-void SensorManager::displayValueMt() const
-{
-	std::vector<std::thread> threads;
-	threads.reserve(sensors.size());
-	for (size_t i = 0; i < sensors.size(); ++i) {
-		threads.emplace_back(readMonoSensor, std::ref(*sensors[i]));
-	}
-	for (auto& t : threads)
-		t.join();
-}
 
 void SensorManager::displayValueMtBuffered() const
 {
 	using namespace std::chrono;
-	using namespace std;
-	std::vector<std::thread> threads;
+
+	const size_t n = sensors.size();
+	const size_t nThreads = std::min<size_t>(NBTHREADS, n);
+	zoned_time readAt{ timezone, floor<milliseconds>(system_clock::now()) };
+
+	std::vector<std::jthread> threads;
+	threads.reserve(nThreads);
+
 	auto t0 = steady_clock::now();
-	threads.reserve(sensors.size());
-	for (size_t i = 0; i < sensors.size(); ++i) {
-		threads.emplace_back(readMonoSensorBuffered, std::ref(*sensors[i]), &displayBuffer[i]);
+	for (size_t t = 0; t < nThreads; ++t) {
+		const size_t begin = t * n / nThreads;
+		const size_t last = (t + 1) * n / nThreads;
+		threads.emplace_back([this, begin, last] {
+			SensorReader reader = SensorReader();
+				for (size_t i = begin; i < last; ++i) {
+					reader.readSensor(*sensors[i].get());
+					displayBuffer[i] = reader.getValues();
+				}
+		});
 	}
-	for (auto& t : threads)
-		t.join();
+
+	for (size_t t = 0; t < nThreads; ++t) {
+		threads[t].join();
+	}
 	auto t1 = steady_clock::now();
-	auto temp = std::accumulate(displayBuffer.begin(), displayBuffer.end(), std::string{});
+	std::string temp;
+	for (int i = 0; i < displayBuffer.size(); i++) {
+		temp += displayBuffer[i];
+	}
+
 	auto t2 = steady_clock::now();
 
-	std::cout << temp<< std::endl;
+	std::cout << temp << std::endl;
 	auto t3 = steady_clock::now();
-
-	cout << "Update Thread" << t1 - t0 << endl;
-	cout << "Concat string" << t2 - t1 << endl;
-	cout << "print string" << t3 - t2 << endl;
-	
+	std::cout << "read " << (t1 - t0)/1000000 << std::endl;
+	std::cout << "concat " <<( t2 - t1) / 1000000 << std::endl;
+	std::cout << "print " <<( t3 - t2 )/ 1000000 << std::endl;
 }
 
 void SensorManager::displayValue() const
