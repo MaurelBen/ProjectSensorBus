@@ -1,9 +1,9 @@
 #include "SensorManager.h"
 #include <numeric>
-#define SLEEPINGTIME std::chrono::milliseconds(200)
+#define SLEEPINGTIME milliseconds(200)
 constexpr size_t NBTHREADS = 8;
 
-static const std::chrono::time_zone* const timezone = std::chrono::current_zone();
+static const time_zone* const timezone = current_zone();
 
 void SensorManager::add(std::unique_ptr<ISensor> sensor) {
 	if (sensor == nullptr) return;
@@ -27,32 +27,31 @@ void SensorManager::dumpState() const{
 	return;
 }
 
-void SensorManager::LoopUpdateSensors(std::chrono::milliseconds time) {
-	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-	std::chrono::system_clock::time_point end = start+time;
+void SensorManager::LoopUpdateSensors(milliseconds time) {
+	system_clock::time_point start = system_clock::now();
+	system_clock::time_point end = start+time;
 	std::cout << " ---- New loop ---- " << std::endl;
 	while (start <= end) {
 		updateSensors();
 		displayValue();
 		std::this_thread::sleep_for(SLEEPINGTIME);
-		start = std::chrono::system_clock::now();
+		start = system_clock::now();
 		std::cout << " ---- New loop ---- " << std::endl;
 	}
 }
 
-void SensorManager::LoopUpdateSensorsMt(std::chrono::milliseconds time) {
-	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-	std::chrono::system_clock::time_point end = start + time;
+void SensorManager::LoopUpdateSensorsMt(milliseconds time) {
+	// Cycle lifetime
+	system_clock::time_point start = system_clock::now();
+	system_clock::time_point end = start + time;
 	// Un thread par capteur
 	std::vector<std::jthread> workers;
 	workers.reserve(sensors.size());
-
-
-	auto debut = std::chrono::steady_clock::now();	
+	auto debut = steady_clock::now();	
 
 	for (const auto& sensor : sensors) {
 		workers.emplace_back([&sensor, end](std::stop_token st) {
-			auto next = std::chrono::system_clock::now();
+			auto next = system_clock::now();
 			while (!st.stop_requested() && next < end) {
 				if (sensor->tryUpdate()) {
 					sensor->updateValues();
@@ -63,19 +62,17 @@ void SensorManager::LoopUpdateSensorsMt(std::chrono::milliseconds time) {
 			});
 	}
 
-	auto fin = std::chrono::steady_clock::now();
-	auto us = std::chrono::duration_cast<std::chrono::microseconds>(fin - debut);
+	auto fin = steady_clock::now();
+	auto us = duration_cast<microseconds>(fin - debut);
 	std::cout << "Duree : " << us.count() << " micro \n";
 
 	
 	// Affichage dans le thread courant
-	auto nextDisplay = std::chrono::system_clock::now();
+	auto nextDisplay = system_clock::now();
 	int i = 1;
-	while (std::chrono::system_clock::now() < end) {
+	while (system_clock::now() < end) {
 		std::cout << " ---- New loop ---- " << i << std::endl;
-
 		displayValueMtBuffered();
-
 		nextDisplay += SLEEPINGTIME;
 		std::this_thread::sleep_until(nextDisplay);
 		i++;
@@ -96,7 +93,6 @@ void SensorManager::updateSensors()
 
 void SensorManager::displayValueMtBuffered() const
 {
-	using namespace std::chrono;
 
 	const size_t n = sensors.size();
 	const size_t nThreads = std::min<size_t>(NBTHREADS, n);
