@@ -1,6 +1,6 @@
 #include "SensorManager.h"
 #include <numeric>
-#define SLEEPINGTIME std::chrono::milliseconds(1000)
+#define SLEEPINGTIME std::chrono::milliseconds(200)
 constexpr size_t NBTHREADS = 8;
 
 static const std::chrono::time_zone* const timezone = std::chrono::current_zone();

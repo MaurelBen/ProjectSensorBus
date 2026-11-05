@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include <chrono>
 #include "ISensor.h"
+using namespace std::chrono;
 
 // Class to read sensor data
 class SensorReader
