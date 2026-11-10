@@ -3,8 +3,6 @@
 #define SLEEPINGTIME milliseconds(200)
 constexpr size_t NBTHREADS = 8;
 
-static const time_zone* const timezone = current_zone();
-
 void SensorManager::add(std::unique_ptr<ISensor> sensor) {
 	if (sensor == nullptr) return;
 	sensors.push_back(std::move(sensor));
@@ -44,22 +42,32 @@ void SensorManager::LoopUpdateSensorsMt(milliseconds time) {
 	// Cycle lifetime
 	system_clock::time_point start = system_clock::now();
 	system_clock::time_point end = start + time;
-	// Un thread par capteur
-	std::vector<std::jthread> workers;
-	workers.reserve(sensors.size());
-	auto debut = steady_clock::now();	
 
-	for (const auto& sensor : sensors) {
-		workers.emplace_back([&sensor, end](std::stop_token st) {
+	// Thread setup
+	const size_t n = sensors.size();
+	const size_t nThreads = std::min<size_t>(NBTHREADS, n);
+	
+	std::vector<std::jthread> workers;
+	workers.reserve(nThreads);
+	auto debut = steady_clock::now();
+
+	// Update threads
+	for (size_t t = 0; t < nThreads; ++t) {
+		const size_t begin = t * n / nThreads;
+		const size_t last = (t + 1) * n / nThreads;
+		workers.emplace_back([this, begin, last, end](std::stop_token st) {
 			auto next = system_clock::now();
 			while (!st.stop_requested() && next < end) {
-				if (sensor->tryUpdate()) {
-					sensor->updateValues();
+				for (size_t i = begin; i < last; ++i) {
+					if (sensors[i]->tryUpdate()) {
+						sensors[i]->updateValues();
+					}
+					next += sensors[i]->getUpdateDt();
+					
 				}
-				next += sensor->getUpdateDt();
 				std::this_thread::sleep_until(next);
 			}
-			});
+		});
 	}
 
 	auto fin = steady_clock::now();
@@ -67,7 +75,7 @@ void SensorManager::LoopUpdateSensorsMt(milliseconds time) {
 	std::cout << "Duree : " << us.count() << " micro \n";
 
 	
-	// Affichage dans le thread courant
+	// Display data
 	auto nextDisplay = system_clock::now();
 	int i = 1;
 	while (system_clock::now() < end) {
@@ -96,7 +104,7 @@ void SensorManager::displayValueMtBuffered() const
 
 	const size_t n = sensors.size();
 	const size_t nThreads = std::min<size_t>(NBTHREADS, n);
-	zoned_time readAt{ timezone, floor<milliseconds>(system_clock::now()) };
+	//zoned_time readAt{ timezone, floor<milliseconds>(system_clock::now()) };
 
 	std::vector<std::jthread> threads;
 	threads.reserve(nThreads);

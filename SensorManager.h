@@ -11,9 +11,14 @@ public:
 	SensorManager() = default;
 	~SensorManager() = default;
 
+	// add a sensor in the sensor list
 	void add(std::unique_ptr<ISensor> sensor);
+	// remove a sensor in the sensor list
 	void remove(std::unique_ptr<ISensor> sensor);
+	// dump info on the sensor (wip)
 	void dumpState() const;
+
+	// Update mono and multithread
 	void LoopUpdateSensors(milliseconds time);
 	void LoopUpdateSensorsMt(milliseconds time);
 

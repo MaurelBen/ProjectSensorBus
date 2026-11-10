@@ -2,16 +2,16 @@
 #include <iostream>
 #include <format>
 
-static const time_zone* const timezone = std::chrono::current_zone();
+static const time_zone* const timezone = current_zone();
 
-static std::string formatTime(std::chrono::system_clock::time_point tp) {
+static std::string formatTime(system_clock::time_point tp) {
     // heure locale, tronquée à la milliseconde
     zoned_time local{ timezone, floor<milliseconds>(tp) };
     return std::format("{:%H:%M:%S}", local);
 }
 
 SensorReader::SensorReader()
-    : sensorName("none"), sensorValue("0"), timestamp(std::chrono::system_clock::now())
+    : sensorName("none"), sensorValue("0"), timestamp(system_clock::now())
 {
 }
 
@@ -39,7 +39,7 @@ std::string SensorReader::getValues()  const
 
 }
 
-std::chrono::system_clock::time_point SensorReader::getTimestamp() const {
+system_clock::time_point SensorReader::getTimestamp() const {
     return timestamp;
 }
 
