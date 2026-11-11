@@ -144,6 +144,7 @@
     <ClCompile Include="SensorManager.cpp" />
     <ClCompile Include="SensorReader.cpp" />
     <ClCompile Include="TemperatureSensor.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="WindSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="SensorManager.h" />
     <ClInclude Include="SensorReader.h" />
     <ClInclude Include="TemperatureSensor.h" />
+    <ClInclude Include="UserInterface.h" />
     <ClInclude Include="WindSensor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

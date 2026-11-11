@@ -3,20 +3,55 @@
 #define SLEEPINGTIME milliseconds(200)
 constexpr size_t NBTHREADS = 8;
 
+SensorManager::SensorManager() {
+	size_t workerCount = NBTHREADS;
+	for (size_t i = 0; i < workerCount; ++i) {
+		
+		m_workers.emplace_back([this,i, workerCount](std::stop_token st) {
+			
+			while (!st.stop_requested()) {
+				{
+					std::shared_lock lock(m_mutex);
+					size_t n = sensors.size();
+					const size_t begin = i * n / workerCount;
+					const size_t last = (i + 1) * n / workerCount;
+					for (size_t i = begin; i < last; ++i) {
+						if (sensors[i]->tryUpdate()) {
+							sensors[i]->updateValues();
+						}
+					}
+				}
+				std::this_thread::sleep_for(100ms);
+			}
+			});
+	}
+}
+
+
 void SensorManager::add(std::unique_ptr<ISensor> sensor) {
 	if (sensor == nullptr) return;
+	std::unique_lock lock(m_mutex);
 	sensors.push_back(std::move(sensor));
 	displayBuffer.push_back("");
 	return;
 }
 
 void SensorManager::remove(std::unique_ptr<ISensor> sensor) {
+	std::unique_lock lock(m_mutex);
 	std::erase(sensors,sensor);
 	displayBuffer.pop_back();
 	return;
 }
 
+void SensorManager::removeLast() {
+	std::unique_lock lock(m_mutex);
+	sensors.pop_back();
+	displayBuffer.pop_back();
+	return;
+}
+
 void SensorManager::dumpState() const{
+	std::shared_lock lock(m_mutex);
 	std::string dump = " actuellement dans le manager il y a " + std::to_string(sensors.size());
 	std::cout << dump << std::endl;
 	for (const auto& s : sensors) {
@@ -25,23 +60,23 @@ void SensorManager::dumpState() const{
 	return;
 }
 
-void SensorManager::LoopUpdateSensors(milliseconds time) {
+void SensorManager::LoopUpdateSensors(milliseconds duration) {
 	system_clock::time_point start = system_clock::now();
-	system_clock::time_point end = start+time;
+	system_clock::time_point end = start+duration;
 	std::cout << " ---- New loop ---- " << std::endl;
 	while (start <= end) {
 		updateSensors();
-		displayValue();
+		//displayValue();
 		std::this_thread::sleep_for(SLEEPINGTIME);
 		start = system_clock::now();
 		std::cout << " ---- New loop ---- " << std::endl;
 	}
 }
 
-void SensorManager::LoopUpdateSensorsMt(milliseconds time) {
+void SensorManager::LoopUpdateSensorsMt(milliseconds duration) {
 	// Cycle lifetime
 	system_clock::time_point start = system_clock::now();
-	system_clock::time_point end = start + time;
+	system_clock::time_point end = start + duration;
 
 	// Thread setup
 	const size_t n = sensors.size();
@@ -101,7 +136,7 @@ void SensorManager::updateSensors()
 
 void SensorManager::displayValueMtBuffered() const
 {
-
+	std::shared_lock lock(m_mutex);
 	const size_t n = sensors.size();
 	const size_t nThreads = std::min<size_t>(NBTHREADS, n);
 	//zoned_time readAt{ timezone, floor<milliseconds>(system_clock::now()) };

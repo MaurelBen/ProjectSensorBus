@@ -2,8 +2,7 @@
 
 
 const bool ISensor::tryUpdate() const {
-	const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-    if (now - lastUpdate >= updateDeltaTime) {
+    if (std::chrono::system_clock::now() - lastUpdate >= updateDeltaTime) {
         return true;
     }
     return false;
