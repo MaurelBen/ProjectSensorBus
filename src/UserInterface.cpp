@@ -1,4 +1,9 @@
 #include "UserInterface.h"
+
+UserInterface::UserInterface() {
+    m_manager = std::make_unique<SensorManager>();
+}
+
 void UserInterface::run() {
     bool running = true;
     while (running) {
@@ -42,7 +47,7 @@ std::optional<int> UserInterface::readInt(const std::string& prompt) const {
 
 
 void UserInterface::handleAdd() {
-    m_manager.get()->add(std::make_unique<TemperatureSensor>("TempSensor", std::chrono::milliseconds(100)));
+    m_manager.get()->add(std::make_unique<TemperatureSensor>("TempSensor", std::chrono::milliseconds((rand()%10) *50)));
     return;
 }
 void UserInterface::handleRemove() {

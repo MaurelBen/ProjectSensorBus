@@ -58,7 +58,7 @@ void SensorManager::dumpState() const{
 	std::string dump = " actuellement dans le manager il y a " + std::to_string(sensors.size());
 	std::cout << dump << std::endl;
 	for (const auto& s : sensors) {
-		std::cout << " - " << s->getName() << std::endl;
+		std::cout << " - " << s->getName() << " - dt : " << s->getUpdateDt() << std::endl;
 	}
 	return;
 }

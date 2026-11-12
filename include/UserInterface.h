@@ -6,6 +6,7 @@ enum class Action { Quit = 0, AddSensor = 1, RemoveSensor = 2, PrintState = 3, D
 
 class UserInterface {
 public:
+    explicit UserInterface();
     explicit UserInterface(std::unique_ptr<SensorManager> manager) : m_manager(std::move(manager)) {}
     void run();
 
