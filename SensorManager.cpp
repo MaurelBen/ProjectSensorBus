@@ -38,13 +38,16 @@ void SensorManager::add(std::unique_ptr<ISensor> sensor) {
 
 void SensorManager::remove(std::unique_ptr<ISensor> sensor) {
 	std::unique_lock lock(m_mutex);
-	std::erase(sensors,sensor);
-	displayBuffer.pop_back();
+	auto temp = std::erase(sensors,sensor);
+	if (temp > 0) {
+		displayBuffer.pop_back();
+	}
 	return;
 }
 
 void SensorManager::removeLast() {
 	std::unique_lock lock(m_mutex);
+	if (sensors.size() == 0) return;
 	sensors.pop_back();
 	displayBuffer.pop_back();
 	return;
