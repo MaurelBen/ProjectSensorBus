@@ -1,4 +1,5 @@
 #include "../include/UserInterface.h"
+#include <numeric>
 
 UserInterface::UserInterface() {
     m_manager = std::make_unique<SensorManager>();
@@ -47,7 +48,16 @@ std::optional<int> UserInterface::readInt(const std::string& prompt) const {
 
 
 void UserInterface::handleAdd() {
-    m_manager.get()->add(std::make_unique<TemperatureSensor>("TempSensor", std::chrono::milliseconds((rand()%10) *50)));
+    auto choice = readInt("UpdateDeltaTime en millisecond (50ms min)?");
+    while (!choice) {
+        if (!std::cin) return;
+        std::cout << "Entree invalide\n";
+        choice = readInt("UpdateDeltaTime en millisecond (50ms min)?");
+    }
+    const std::chrono::milliseconds dt = std::chrono::milliseconds(std::max<int>(*choice, 50));
+    std::cout<< "Un nouveau capteur a ete ajoute avec un dt de " << dt << std::endl;
+
+    m_manager.get()->add(std::make_unique<TemperatureSensor>("TempSensor", dt));
     return;
 }
 void UserInterface::handleRemove() {
