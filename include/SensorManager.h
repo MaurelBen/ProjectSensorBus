@@ -2,6 +2,7 @@
 #include <iostream>
 #include "ISensor.h"
 #include "SensorReader.h"
+#include <numeric>
 #include <thread>
 #include <shared_mutex>
 

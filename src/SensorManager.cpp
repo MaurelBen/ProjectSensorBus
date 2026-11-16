@@ -1,5 +1,5 @@
 #include "../include/SensorManager.h"
-#include <numeric>
+
 #define SLEEPINGTIME milliseconds(200)
 constexpr size_t NBTHREADS = 8;
 
