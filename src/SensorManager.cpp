@@ -1,4 +1,4 @@
-#include "SensorManager.h"
+#include "../include/SensorManager.h"
 #include <numeric>
 #define SLEEPINGTIME milliseconds(200)
 constexpr size_t NBTHREADS = 8;
@@ -15,9 +15,9 @@ SensorManager::SensorManager() {
 					size_t n = sensors.size();
 					const size_t begin = i * n / workerCount;
 					const size_t last = (i + 1) * n / workerCount;
-					for (size_t i = begin; i < last; ++i) {
-						if (sensors[i]->tryUpdate()) {
-							sensors[i]->updateValues();
+					for (size_t index = begin; index < last; ++index) {
+						if (sensors[index]->tryUpdate()) {
+							sensors[index]->updateValues();
 						}
 					}
 				}
@@ -91,12 +91,12 @@ void SensorManager::LoopUpdateSensorsMt(milliseconds duration) {
 
 	// Update threads
 	for (size_t t = 0; t < nThreads; ++t) {
-		const size_t begin = t * n / nThreads;
-		const size_t last = (t + 1) * n / nThreads;
-		workers.emplace_back([this, begin, last, end](std::stop_token st) {
+		const size_t beginIndex = t * n / nThreads;
+		const size_t lastIndex = (t + 1) * n / nThreads;
+		workers.emplace_back([this, beginIndex, lastIndex, end](std::stop_token st) {
 			auto next = system_clock::now();
 			while (!st.stop_requested() && next < end) {
-				for (size_t i = begin; i < last; ++i) {
+				for (size_t i = beginIndex; i < lastIndex; ++i) {
 					if (sensors[i]->tryUpdate()) {
 						sensors[i]->updateValues();
 					}

@@ -15,45 +15,45 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\ISensor.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="SensorReader.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="ISensor.cpp">
+    <ClCompile Include="src\SensorManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="TemperatureSensor.cpp">
+    <ClCompile Include="src\SensorReader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="WindSensor.cpp">
+    <ClCompile Include="src\TemperatureSensor.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="SensorManager.cpp">
+    <ClCompile Include="src\UserInterface.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="UserInterface.cpp">
+    <ClCompile Include="src\WindSensor.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SensorReader.h">
+    <ClInclude Include="include\ISensor.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="ISensor.h">
+    <ClInclude Include="include\SensorManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="TemperatureSensor.h">
+    <ClInclude Include="include\SensorReader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="WindSensor.h">
+    <ClInclude Include="include\TemperatureSensor.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="SensorManager.h">
+    <ClInclude Include="include\UserInterface.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="UserInterface.h">
+    <ClInclude Include="include\WindSensor.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

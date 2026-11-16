@@ -1,9 +1,9 @@
 #include <iostream>
-#include "SensorReader.h"
-#include "TemperatureSensor.h"
-#include "WindSensor.h"
-#include "SensorManager.h"
-#include "UserInterface.h"
+#include "../include/SensorReader.h"
+#include "../include/TemperatureSensor.h"
+#include "../include/WindSensor.h"
+#include "../include/SensorManager.h"
+#include "../include/UserInterface.h"
 
 static std::unique_ptr<SensorManager> initSensorsBasic() {
 	std::unique_ptr<SensorManager> manager = std::make_unique<SensorManager>();

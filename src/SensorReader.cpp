@@ -1,4 +1,4 @@
-#include "SensorReader.h"
+#include "../include/SensorReader.h"
 #include <iostream>
 #include <format>
 

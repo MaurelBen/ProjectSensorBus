@@ -1,4 +1,4 @@
-#include "ISensor.h"
+#include "../include/WindSensor.h"
 
 
 const bool ISensor::tryUpdate() const {

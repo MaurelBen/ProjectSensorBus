@@ -1,4 +1,4 @@
-#include "TemperatureSensor.h"
+#include "../include/TemperatureSensor.h"
 #include <format>
 
 TemperatureSensor::TemperatureSensor(const std::string& name) :

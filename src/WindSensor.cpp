@@ -1,4 +1,4 @@
-#include "WindSensor.h"
+#include "../include/WindSensor.h"
 
 WindSensor::WindSensor(const std::string& name) : ISensor(name)
 {

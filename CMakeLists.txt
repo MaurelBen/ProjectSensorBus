@@ -7,7 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Threads REQUIRED)
 
-# Tout sauf main.cpp : la logique du programme
+
 add_library(sensor_lib STATIC
     src/ISensor.cpp
     src/TemperatureSensor.cpp
@@ -22,6 +22,8 @@ target_link_libraries(sensor_lib PUBLIC Threads::Threads)
 # L'exécutable
 add_executable(sensor_sim src/main.cpp)
 target_link_libraries(sensor_sim PRIVATE sensor_lib)
+set_property(DIRECTORY ${PROJECT_SOURCE_DIR}
+             PROPERTY VS_STARTUP_PROJECT sensor_sim)
 
 # Options du compilateur
 if(MSVC)

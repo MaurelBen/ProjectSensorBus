@@ -139,21 +139,21 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ISensor.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="SensorManager.cpp" />
-    <ClCompile Include="SensorReader.cpp" />
-    <ClCompile Include="TemperatureSensor.cpp" />
-    <ClCompile Include="UserInterface.cpp" />
-    <ClCompile Include="WindSensor.cpp" />
+    <ClCompile Include="src\ISensor.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\SensorManager.cpp" />
+    <ClCompile Include="src\SensorReader.cpp" />
+    <ClCompile Include="src\TemperatureSensor.cpp" />
+    <ClCompile Include="src\UserInterface.cpp" />
+    <ClCompile Include="src\WindSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ISensor.h" />
-    <ClInclude Include="SensorManager.h" />
-    <ClInclude Include="SensorReader.h" />
-    <ClInclude Include="TemperatureSensor.h" />
-    <ClInclude Include="UserInterface.h" />
-    <ClInclude Include="WindSensor.h" />
+    <ClInclude Include="include\ISensor.h" />
+    <ClInclude Include="include\SensorManager.h" />
+    <ClInclude Include="include\SensorReader.h" />
+    <ClInclude Include="include\TemperatureSensor.h" />
+    <ClInclude Include="include\UserInterface.h" />
+    <ClInclude Include="include\WindSensor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
