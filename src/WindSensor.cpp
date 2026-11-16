@@ -10,7 +10,6 @@ WindSensor::~WindSensor() {
 
 std::string WindSensor::valueToString() const
 {
-	//std::string text =  + " / " + std::to_string(wind.dir.y) + " at " + std::to_string(wind.speed) + "km/h ";
 	std::string text = std::format("Wind direction :{:.2f} / {:.2f} at {:.2f} km/h ", wind.dir.x, wind.dir.y, wind.speed);
 	return text;
 }

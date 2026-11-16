@@ -8,7 +8,6 @@ SensorManager::SensorManager() {
 	for (size_t i = 0; i < workerCount; ++i) {
 		
 		m_workers.emplace_back([this,i, workerCount](std::stop_token st) {
-			
 			while (!st.stop_requested()) {
 				{
 					std::shared_lock lock(m_mutex);
@@ -38,8 +37,7 @@ void SensorManager::add(std::unique_ptr<ISensor> sensor) {
 
 void SensorManager::remove(std::unique_ptr<ISensor> sensor) {
 	std::unique_lock lock(m_mutex);
-	auto temp = std::erase(sensors,sensor);
-	if (temp > 0) {
+	if (std::erase(sensors, sensor) > 0) {
 		displayBuffer.pop_back();
 	}
 	return;
@@ -55,14 +53,14 @@ void SensorManager::removeLast() {
 
 void SensorManager::dumpState() const{
 	std::shared_lock lock(m_mutex);
-	std::string dump = " actuellement dans le manager il y a " + std::to_string(sensors.size());
-	std::cout << dump << std::endl;
+	std::cout << "Actuellement dans le manager il y a " + std::to_string(sensors.size()) + " sensor(s)" << std::endl;
 	for (const auto& s : sensors) {
 		std::cout << " - " << s->getName() << " - dt : " << s->getUpdateDt() << std::endl;
 	}
 	return;
 }
 
+/*
 void SensorManager::LoopUpdateSensors(milliseconds duration) {
 	system_clock::time_point start = system_clock::now();
 	system_clock::time_point end = start+duration;
@@ -87,7 +85,6 @@ void SensorManager::LoopUpdateSensorsMt(milliseconds duration) {
 	
 	std::vector<std::jthread> workers;
 	workers.reserve(nThreads);
-	auto debut = steady_clock::now();
 
 	// Update threads
 	for (size_t t = 0; t < nThreads; ++t) {
@@ -108,16 +105,11 @@ void SensorManager::LoopUpdateSensorsMt(milliseconds duration) {
 		});
 	}
 
-	auto fin = steady_clock::now();
-	auto us = duration_cast<microseconds>(fin - debut);
-	std::cout << "Duree : " << us.count() << " micro \n";
-
 	
 	// Display data
 	auto nextDisplay = system_clock::now();
 	int i = 1;
 	while (system_clock::now() < end) {
-		std::cout << " ---- New loop ---- " << i << std::endl;
 		displayValueMtBuffered();
 		nextDisplay += SLEEPINGTIME;
 		std::this_thread::sleep_until(nextDisplay);
@@ -135,7 +127,7 @@ void SensorManager::updateSensors()
 		}
 	}
 }
-
+*/
 
 void SensorManager::displayValueMtBuffered() const
 {

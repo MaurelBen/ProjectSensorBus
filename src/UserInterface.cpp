@@ -6,7 +6,8 @@ UserInterface::UserInterface() {
 }
 
 void UserInterface::run() {
-    bool running = true;
+    bool running = true; 
+    m_manager.get()->dumpState();
     while (running) {
         showMenu();
         const auto choice = readInt("> ");
@@ -34,11 +35,12 @@ void UserInterface::showMenu() const {
         "0. Quitter\n";
 }
 
+/* IA Made */
 std::optional<int> UserInterface::readInt(const std::string& prompt) const {
     std::cout << prompt << std::flush;
     std::string line;
     if (!std::getline(std::cin, line)) return std::nullopt;
-
+    
     int value{};
     const char* end = line.data() + line.size();
     const auto [ptr, ec] = std::from_chars(line.data(), end, value);
@@ -65,7 +67,6 @@ void UserInterface::handleRemove() {
     return;
 }
 void UserInterface::handleDump() const {
-    
     m_manager.get()->dumpState();
     return;
 }

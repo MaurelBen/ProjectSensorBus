@@ -23,9 +23,10 @@ public:
 	void dumpState() const;
 
 	// Update mono and multithread
+	/*
 	void LoopUpdateSensors(milliseconds duration);
 	void LoopUpdateSensorsMt(milliseconds duration);
-
+	*/
 	void displayValue() const;
 	void displayValueMtBuffered() const;
 
