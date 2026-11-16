@@ -140,22 +140,21 @@ void SensorManager::updateSensors()
 void SensorManager::displayValueMtBuffered() const
 {
 	std::shared_lock lock(m_mutex);
-	const size_t n = sensors.size();
-	const size_t nThreads = std::min<size_t>(NBTHREADS, n);
-	//zoned_time readAt{ timezone, floor<milliseconds>(system_clock::now()) };
+	const size_t sensorSize = sensors.size();
+	const size_t nThreads = std::min<size_t>(NBTHREADS, sensorSize);
 
 	std::vector<std::jthread> threads;
 	threads.reserve(nThreads);
 
 	auto t0 = steady_clock::now();
 	for (size_t t = 0; t < nThreads; ++t) {
-		const size_t begin = t * n / nThreads;
-		const size_t last = (t + 1) * n / nThreads;
-		threads.emplace_back([this, begin, last] {
+		const size_t beginIndex = t * sensorSize / nThreads;
+		const size_t lastIndex = (t + 1) * sensorSize / nThreads;
+		threads.emplace_back([this, beginIndex, lastIndex] {
 			SensorReader reader = SensorReader();
-				for (size_t i = begin; i < last; ++i) {
-					reader.readSensor(*sensors[i].get());
-					displayBuffer[i] = reader.getValues();
+				for (size_t index = beginIndex; index < lastIndex; ++index) {
+					reader.readSensor(*sensors[index].get());
+					displayBuffer[index] = reader.getValues();
 				}
 		});
 	}
@@ -163,19 +162,11 @@ void SensorManager::displayValueMtBuffered() const
 	for (size_t t = 0; t < nThreads; ++t) {
 		threads[t].join();
 	}
-	auto t1 = steady_clock::now();
 	std::string temp;
 	for (int i = 0; i < displayBuffer.size(); i++) {
 		temp += displayBuffer[i];
 	}
-
-	auto t2 = steady_clock::now();
-
 	std::cout << temp << std::endl;
-	auto t3 = steady_clock::now();
-	std::cout << "read " << (t1 - t0)/1000000 << std::endl;
-	std::cout << "concat " <<( t2 - t1) / 1000000 << std::endl;
-	std::cout << "print " <<( t3 - t2 )/ 1000000 << std::endl;
 }
 
 void SensorManager::displayValue() const

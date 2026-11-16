@@ -5,7 +5,7 @@
 #include "../include/SensorManager.h"
 #include "../include/UserInterface.h"
 
-static std::unique_ptr<SensorManager> initSensorsBasic() {
+[[maybe_unused]]  static std::unique_ptr<SensorManager> initSensorsBasic() {
 	std::unique_ptr<SensorManager> manager = std::make_unique<SensorManager>();
 	manager->add(std::make_unique<TemperatureSensor>("TempSensor", std::chrono::milliseconds(100)));
 	manager->add(std::make_unique<TemperatureSensor>("TempSensor2", std::chrono::milliseconds(250)));
@@ -13,7 +13,7 @@ static std::unique_ptr<SensorManager> initSensorsBasic() {
 	return manager;
 }
 
-static std::unique_ptr<SensorManager> initSensorsMulti(int nb) {
+[[maybe_unused]]  static std::unique_ptr<SensorManager> initSensorsMulti(int nb) {
 	std::unique_ptr<SensorManager> manager = std::make_unique<SensorManager>();
 	for (int i = 0; i < nb; i++) {
 		if(i%2==0)
@@ -26,13 +26,8 @@ static std::unique_ptr<SensorManager> initSensorsMulti(int nb) {
 
 int main() 
 {
-	//std::unique_ptr<SensorManager> manager = initSensorsBasic();
-	//std::unique_ptr<SensorManager> manager = initSensorsMulti(10);
-
 	UserInterface ui;
 	ui.run();
-	//manager->dumpState();
-	//manager->LoopUpdateSensors(std::chrono::milliseconds(10000));
-	//manager->LoopUpdateSensorsMt(std::chrono::milliseconds(5000));
+
 	return 0;
 }
