@@ -12,9 +12,9 @@ SensorManager::SensorManager() {
 				{
 					std::shared_lock lock(m_mutex);
 					size_t n = sensors.size();
-					const size_t begin = i * n / nThreads;
-					const size_t last = (i + 1) * n / nThreads;
-					for (size_t index = begin; index < last; ++index) {
+					const size_t beginIndex = i * n / nThreads;
+					const size_t lastIndex = (i + 1) * n / nThreads;
+					for (size_t index = beginIndex; index < lastIndex; ++index) {
 						if (sensors[index]->tryUpdate()) {
 							sensors[index]->updateValues();
 						}
