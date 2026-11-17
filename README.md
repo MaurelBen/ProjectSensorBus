@@ -1,7 +1,7 @@
 # ProjectSensorBus
 
 The goal of this project is to create a sensor bus that can be used to read multiple sensors datas in a parallel manner.
-The type of the data is only known by the sensor (for exemple an TemperatureSensor have the temperature but a windSensor will have a speed and a direction)
+The type of the data is only known by the sensor (for exemple an TemperatureSensor have the temperature but a windSensor will have a speed and a direction).
 
 
 The code is easily maintainable, the ISensor abstract class allows a polymorphism on the type of sensor, and the SensorReader class can be overloaded (especially the printvalues method) with a different display or display target.
@@ -12,7 +12,7 @@ Currently i set a pool of 8 thread taking a part of the whole pool of sensors an
 
 During add or remove, i use a mutex to lock down the memory acces and avoid data race. 
 
-Threads are handled by jThreads witch respect the RAII principle and are automaticly and nicely free at the end of their context (in that case the manager. When we remove delete the manager, threads are automaticly free)
+Threads are handled by jThreads witch respect the RAII principle and are automaticly and nicely free at the end of their context (in that case the manager. When we remove delete the manager, threads are automaticly free).
 
 The UI is only used to perform the various actions that can be carried out using the manager.
 
@@ -20,8 +20,10 @@ I tried in this projet to respect the more i can get the design patern i know to
 
 ## Build
 
-cmake -B build
+cmake -B build 
+
 cmake --build build
+
 ./build/sensor_sim.exe
 
 ### Prérequis
