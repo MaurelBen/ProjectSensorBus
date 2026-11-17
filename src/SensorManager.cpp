@@ -4,16 +4,16 @@
 constexpr size_t NBTHREADS = 8;
 
 SensorManager::SensorManager() {
-	size_t workerCount = NBTHREADS;
-	for (size_t i = 0; i < workerCount; ++i) {
+	size_t nThreads = NBTHREADS;
+	for (size_t i = 0; i < nThreads; ++i) {
 		
-		m_workers.emplace_back([this,i, workerCount](std::stop_token st) {
+		m_workers.emplace_back([this,i, nThreads](std::stop_token st) {
 			while (!st.stop_requested()) {
 				{
 					std::shared_lock lock(m_mutex);
 					size_t n = sensors.size();
-					const size_t begin = i * n / workerCount;
-					const size_t last = (i + 1) * n / workerCount;
+					const size_t begin = i * n / nThreads;
+					const size_t last = (i + 1) * n / nThreads;
 					for (size_t index = begin; index < last; ++index) {
 						if (sensors[index]->tryUpdate()) {
 							sensors[index]->updateValues();
