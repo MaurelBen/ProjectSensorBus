@@ -12,7 +12,7 @@ public:
 
 private:
     void showMenu() const;
-    std::optional<int> readInt(const std::string& prompt) const;
+    int readInt(const std::string& prompt) const;
     void handleAdd();
     void handleRemove();
     void handleDump() const;
