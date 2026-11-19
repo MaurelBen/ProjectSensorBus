@@ -11,8 +11,7 @@ void UserInterface::run() {
     while (running) {
         showMenu();
         const auto choice = readInt("> ");
-        if (!choice) {
-            if (!std::cin) break;
+        if (choice < 0) {
             continue;
         }
         switch (static_cast<Action>(choice)) {
@@ -43,9 +42,9 @@ int UserInterface::readInt(const std::string& prompt) const {
     try {
         value = stoi(temp);
     } 
-    catch(const std::invalid_argument& e){
+    catch(const std::invalid_argument&){
         std::cerr << "Entree invalide, un nombre est attendu" << std::endl;
-        value = 0;
+        value = -1;
     }
 
     return value;
@@ -53,15 +52,14 @@ int UserInterface::readInt(const std::string& prompt) const {
 
 
 void UserInterface::handleAdd() {
-    auto choice = readInt("UpdateDeltaTime en millisecond (50ms min)?");
-    while (!choice) {
-        if (!std::cin) return;
-        choice = readInt("UpdateDeltaTime en millisecond (50ms min)?");
+    auto choice = readInt("UpdateDeltaTime en millisecond (" + std::to_string(SLEEPINGTIME.count()) +" min) ? ");
+    while (choice<=50) {
+        std::cout << "Entree invalide: un entier > 50 est necessaire" << std::endl;
+        choice = readInt("UpdateDeltaTime en millisecond ("+ std::to_string(SLEEPINGTIME.count()) +" min) ? ");
     }
-    const std::chrono::milliseconds dt = std::chrono::milliseconds(std::max<int>(choice, 50));
-    std::cout<< "Un nouveau capteur a ete ajoute avec un dt de " << dt << std::endl;
+    std::cout<< "Un nouveau capteur a ete ajoute avec un dt de " << choice << std::endl;
 
-    m_manager.get()->add(std::make_unique<TemperatureSensor>("TempSensor", dt));
+    m_manager.get()->add(std::make_unique<TemperatureSensor>("TempSensor", std::chrono::milliseconds(choice)));
     return;
 }
 void UserInterface::handleRemove() {
