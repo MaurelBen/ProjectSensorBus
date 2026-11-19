@@ -6,6 +6,8 @@
 #include <thread>
 #include <shared_mutex>
 
+#define SLEEPINGTIME milliseconds(50)
+
 using namespace std::chrono;
 
 class SensorManager

@@ -1,6 +1,6 @@
 #include "../include/SensorManager.h"
 
-#define SLEEPINGTIME milliseconds(200)
+
 constexpr size_t NBTHREADS = 8;
 
 SensorManager::SensorManager() {
@@ -20,7 +20,7 @@ SensorManager::SensorManager() {
 						}
 					}
 				}
-				std::this_thread::sleep_for(100ms);
+				std::this_thread::sleep_for(SLEEPINGTIME);
 			}
 			});
 	}
