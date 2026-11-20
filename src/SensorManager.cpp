@@ -45,11 +45,14 @@ void SensorManager::remove(std::unique_ptr<ISensor> sensor) {
 
 void SensorManager::removeLast() {
 	std::unique_lock lock(m_mutex);
-	if (sensors.size() == 0) return;
+	if (sensors.size() == 0) {
+		std::cout << "Pas de sensor a supprimer dans le pool " << std::endl;
+		return;
+	}
 	std::unique_ptr<ISensor> temp = std::move(sensors.back());
 	sensors.pop_back();
 	displayBuffer.pop_back();
-	std::cout << temp.get()->getName() << " has been removed." << std::endl;;
+	std::cout << temp.get()->getName() << " a ete supprime" << std::endl;
 	return;
 }
 
