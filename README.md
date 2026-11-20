@@ -22,9 +22,9 @@ I tried in this projet to respect the more i can get the design patern i know to
 
 cmake -B build 
 
-cmake --build build
+cmake --build build --config Release
 
-./build/sensor_sim.exe
+./build/Release/sensor_sim.exe
 
 ### Prérequis
 CMake ≥ 3.20
