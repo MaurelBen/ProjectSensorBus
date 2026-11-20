@@ -53,7 +53,7 @@ int UserInterface::readInt(const std::string& prompt) const {
 
 void UserInterface::handleAdd() {
     auto choice = readInt("UpdateDeltaTime en millisecond (" + std::to_string(SLEEPINGTIME.count()) +" min) ? ");
-    while (choice<=50) {
+    while (choice< SLEEPINGTIME.count()) {
         std::cout << "Entree invalide: un entier > 50 est necessaire" << std::endl;
         choice = readInt("UpdateDeltaTime en millisecond ("+ std::to_string(SLEEPINGTIME.count()) +" min) ? ");
     }
